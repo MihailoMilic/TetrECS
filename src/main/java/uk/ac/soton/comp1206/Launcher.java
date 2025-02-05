@@ -5,6 +5,8 @@ package uk.ac.soton.comp1206;
  * Launcher is used when running as a shaded jar file.
  */
 public class Launcher {
+    /**Launcher*/
+    public Launcher() {}
 
     /**
      * Launch the JavaFX Application, passing through the commandline arguments

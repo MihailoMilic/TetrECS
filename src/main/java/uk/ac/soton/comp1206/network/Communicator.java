@@ -8,6 +8,7 @@ import uk.ac.soton.comp1206.event.CommunicationsListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Uses web sockets to talk to a web socket server and relays communication to attached listeners
@@ -24,14 +25,15 @@ public class Communicator {
     private final List<CommunicationsListener> handlers = new ArrayList<>();
 
     private WebSocket ws = null;
+    private Runnable onConnectedCallback;
 
     /**
      * Create a new communicator to the given web socket server
      *
      * @param server server to connect to
      */
-    public Communicator(String server) {
 
+    public Communicator(String server ) {
         try {
             var socketFactory = new WebSocketFactory();
 
@@ -71,6 +73,15 @@ public class Communicator {
                     e.printStackTrace();
                 }
             });
+            ws.addListener(new WebSocketAdapter() {
+                @Override
+                public void onConnected(WebSocket websocket, Map<String, List<String>> headers) throws Exception {
+                    logger.info("Connected to " + server);
+                    if(onConnectedCallback != null) {
+                        onConnectedCallback.run();
+                    }
+                }
+            });
 
         } catch (Exception e){
             logger.error("Socket error: " + e.getMessage());
@@ -81,7 +92,13 @@ public class Communicator {
             System.exit(1);
         }
     }
-
+/**
+ * Sends a message to the server
+ * @param onConnectedCallback on Connected Call Back
+ * */
+public void setOnConnectedCallback(Runnable onConnectedCallback) {
+    this.onConnectedCallback = onConnectedCallback;
+}
     /** Send a message to the server
      *
      * @param message Message to send
@@ -97,6 +114,7 @@ public class Communicator {
      * @param listener the listener to add
      */
     public void addListener(CommunicationsListener listener) {
+        logger.info("Listener added");
         this.handlers.add(listener);
     }
 
@@ -104,6 +122,7 @@ public class Communicator {
      * Clear all current listeners
      */
     public void clearListeners() {
+        logger.info("Cleared listeners");
         this.handlers.clear();
     }
 
@@ -113,9 +132,10 @@ public class Communicator {
      * @param message the message that was received
      */
     private void receive(WebSocket websocket, String message) {
-        logger.info("Received: " + message);
-
+        if (handlers.isEmpty()) logger.warn("No handlers ");
+        logger.info("Received message:{} ", message);
         for(CommunicationsListener handler : handlers) {
+            logger.info("Handling " + message);
             handler.receiveCommunication(message);
         }
     }

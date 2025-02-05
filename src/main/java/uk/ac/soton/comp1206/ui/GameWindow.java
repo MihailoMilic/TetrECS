@@ -2,6 +2,7 @@ package uk.ac.soton.comp1206.ui;
 
 import javafx.application.Platform;
 import javafx.scene.Scene;
+import javafx.scene.control.ListView;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -9,6 +10,7 @@ import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import uk.ac.soton.comp1206.App;
+import uk.ac.soton.comp1206.game.Game;
 import uk.ac.soton.comp1206.network.Communicator;
 import uk.ac.soton.comp1206.scene.*;
 
@@ -28,9 +30,10 @@ public class GameWindow {
 
     private final Stage stage;
 
+
     private BaseScene currentScene;
     private Scene scene;
-
+    private int mediateScore;
     final Communicator communicator;
 
     /**
@@ -61,6 +64,7 @@ public class GameWindow {
         startMenu();
     }
 
+
     /**
      * Setup the font and any other resources we need
      */
@@ -86,7 +90,30 @@ public class GameWindow {
     public void startChallenge() { loadScene(new ChallengeScene(this)); }
 
     /**
-     * Setup the default settings for the stage itself (the window), such as the title and minimum width and height.
+     * Displays Instructions*/
+    public void startInstructions(){ loadScene( new InstructionsScene(this));}
+    /**
+     * Displays Scores
+     * @param game game object passed from challange scene
+     * */
+    public void startScores(Game game){loadScene(new ScoreScene(this, game));}
+    /**
+     * Displays the Scores Scene
+     * @param game game object passed from challange scene
+     * @param scores list of scores passed from the MultiPlayer scene
+     * */
+    public void startScores(Game game, ListView<String[]> scores){loadScene(new ScoreScene(this, game, scores));}
+    /**
+     * Displays Lobby Scene*/
+    public void startMultiplayer() {loadScene( new LobbyScene(this));}
+    /**
+     * Starts MultiPlayer Scene.
+     * @param communicator Communicator passed from lobby scene.
+     * */
+    public void startMultiPlayerScene(Communicator communicator){loadScene( new MultiplayerScene(this,communicator));  }
+
+    /**
+     * Set up the default settings for the stage itself (the window), such as the title and minimum width and height.
      */
     public void setupStage() {
         stage.setTitle("TetrECS");
@@ -160,4 +187,7 @@ public class GameWindow {
     public Communicator getCommunicator() {
         return communicator;
     }
+
+
+
 }

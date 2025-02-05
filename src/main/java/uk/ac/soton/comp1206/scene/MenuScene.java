@@ -1,6 +1,7 @@
 package uk.ac.soton.comp1206.scene;
 
 import javafx.event.ActionEvent;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
@@ -16,6 +17,7 @@ public class MenuScene extends BaseScene {
 
     private static final Logger logger = LogManager.getLogger(MenuScene.class);
 
+    MultiMedia menuMusic = new MultiMedia("src/main/resources/music/menu.mp3");
     /**
      * Create a new menu scene
      * @param gameWindow the Game Window this will be displayed in
@@ -39,21 +41,32 @@ public class MenuScene extends BaseScene {
         menuPane.setMaxHeight(gameWindow.getHeight());
         menuPane.getStyleClass().add("menu-background");
         root.getChildren().add(menuPane);
-
+        menuMusic.playMusic();
         var mainPane = new BorderPane();
         menuPane.getChildren().add(mainPane);
-
         //Awful title
         var title = new Text("TetrECS");
         title.getStyleClass().add("title");
-        mainPane.setTop(title);
+
+
 
         //For now, let us just add a button that starts the game. I'm sure you'll do something way better.
         var button = new Button("Play");
-        mainPane.setCenter(button);
+        var insutrctions = new Button("Instructions");
+        var multiplayer = new Button("Multiplayer");
+        insutrctions.getStyleClass().add("menuItem");
+        button.getStyleClass().add("menuItem");
+        multiplayer.getStyleClass().add("menuItem");
 
+        var menu = new VBox();
+        menu.setAlignment(Pos.CENTER);
+        menu.getChildren().addAll(title, button, insutrctions, multiplayer);
+        menu.setSpacing(60);
+        mainPane.setCenter(menu);
         //Bind the button action to the startGame method in the menu
         button.setOnAction(this::startGame);
+        insutrctions.setOnAction(this::startInstructions);
+        multiplayer.setOnAction(this::startMultiplayer);
     }
 
     /**
@@ -70,6 +83,13 @@ public class MenuScene extends BaseScene {
      */
     private void startGame(ActionEvent event) {
         gameWindow.startChallenge();
+        menuMusic.stopMusic();
     }
-
+    /**
+     * Starts instructions scene.*/
+    private void startInstructions(ActionEvent event){gameWindow.startInstructions();}
+/**
+ * Starts multiplayer scene*/
+    private void startMultiplayer(ActionEvent event) {gameWindow.startMultiplayer();
+    menuMusic.stopMusic();}
 }

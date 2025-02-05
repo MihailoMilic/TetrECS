@@ -19,7 +19,41 @@
 .menu {
     -fx-padding: 10;
 }
+.button {
+    -fx-fill: white;
+    -fx-font-family: 'Orbitron';
+    -fx-font-size: 16px;
+    -fx-font-weight: 700;
+    -fx-border-color: black;
+    -fx-stroke: black;
+    -fx-effect: dropshadow(gaussian, black, 1, 1.0, 1, 1);
+}
 
+.button:hover {
+    -fx-fill: yellow;
+}
+
+.button.selected {
+    -fx-fill: yellow;
+}
+.smallMenuItem{
+    -fx-font-size:12px;
+    -fx-fill: white;
+    -fx-font-family: 'Orbitron';
+    -fx-font-weight: 700;
+    -fx-border-color: black;
+    -fx-stroke: black;
+    -fx-effect: dropshadow(gaussian, black, 1, 1.0, 1, 1);
+}
+.mediumMenuItem{
+    -fx-fill: white;
+    -fx-font-family: 'Orbitron';
+    -fx-font-size: 20px;
+    -fx-font-weight: 700;
+    -fx-border-color: black;
+    -fx-stroke: black;
+    -fx-effect: dropshadow(gaussian, black, 1, 1.0, 1, 1);
+}
 .menuItem {
     -fx-fill: white;
     -fx-font-family: 'Orbitron';
@@ -47,11 +81,23 @@
     -fx-stroke: black;
     -fx-effect: dropshadow(gaussian, black, 1, 1.0, 1, 1);
 }
+/* List cell */
+.leaderboardCell {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+/* Hover effect */
+.leaderboardCell:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.2);
+}
+
 
 .title {
     -fx-fill: white;
     -fx-font-family: 'Orbitron';
-    -fx-font-size: 32px;
+    -fx-font-size: 60px;
     -fx-font-weight: 900;
     -fx-border-color: black;
     -fx-stroke: black;
@@ -111,11 +157,57 @@
     -fx-text-alignment: center;
     -fx-effect: dropshadow(gaussian, black, 1, 1.0, 1, 1);
 }
-
-.scorelist {
-    -fx-font-size: 20px;
+.multiplayerElements {
+    -fx-font-size: 10px;
     -fx-font-family: 'Orbitron';
+    -fx-background-color: transparent;
+    -fx-border-color: orange;
+    -fx-border-width: 2px;
+    -fx-text-fill: white;
+    -fx-max-height: 300px;
 }
+.multiplayerElements .list-cell {
+    -fx-padding: 10px;
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-effect: dropshadow(gaussian, black, 1, 1.0, 1, 1);
+}
+.scorelist {
+    -fx-font-size: 18px;
+    -fx-font-family: 'Orbitron';
+    -fx-background-color: rgba(0, 0, 0, 0.8);
+    -fx-border-color: orange;
+    -fx-border-width: 2px;
+    -fx-text-fill: white;
+    -fx-max-height: 300px;
+}
+
+.scorelist .list-cell {
+    -fx-padding: 10px;
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    -fx-effect: dropshadow(gaussian, black, 1, 1.0, 1, 1);
+}
+
+.scorelist .list-cell:hover {
+    -fx-background-color: rgba(255, 165, 0, 0.5);
+}
+
+.scorelist .list-cell:selected {
+    -fx-background-color: rgba(255, 215, 0, 0.8);
+    -fx-text-fill: black;
+}
+
+.scorelist .scroll-bar {
+    -fx-background-color: transparent;
+}
+
+.scorelist .scroll-bar .thumb {
+    -fx-background-color: rgba(255, 255, 255, 0.9);
+    -fx-background-insets: 2;
+    -fx-background-radius: 5;
+}
+
 
 .scoreitem {
 
@@ -162,6 +254,88 @@
     -fx-border-color: white;
     -fx-border-width: 1;
 }
+/* LobbyScene specific styles */
+
+/* Channel label */
+.channelLabel {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+/* Channel list item */
+.channelItem {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+/* Channel list item when selected */
+.channelItem:selected {
+    -fx-text-fill: yellow;
+}
+
+/* Player list */
+.playerList {
+    -fx-font-size: 14px;
+    -fx-text-fill: white;
+}
+
+/* Player list item */
+.playerItem {
+    -fx-font-size: 14px;
+    -fx-text-fill: white;
+}
+
+/* Player list item for the current user */
+.playerItem.current {
+    -fx-font-weight: bold;
+}
+
+/* Text input field */
+.textInput {
+    -fx-border-color: white;
+    -fx-border-width: 1px;
+    -fx-background-color: rgba(0, 0, 0, 0.5);
+    -fx-text-fill: white;
+    -fx-prompt-text-fill: grey;
+}
+
+/* Button styles */
+.button {
+    -fx-font-family: 'Orbitron';
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+    -fx-background-color: rgba(0, 0, 0, 0.5);
+}
+
+.button:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* New Channel button */
+.newChannelButton {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+    -fx-background-color: rgba(0, 0, 0, 0.5);
+}
+
+/* Refresh button */
+.refreshButton {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+    -fx-background-color: rgba(0, 0, 0, 0.5);
+}
+
+/* Styling for the lobby background */
+.lobbyBackground {
+    -fx-background-image: url("/Users/mihailo/comp1206/coursework/src/main/resources/images/6.jpg");
+    -fx-background-size: cover;
+}
+
 
 .scroller {
     -fx-background-color: transparent;

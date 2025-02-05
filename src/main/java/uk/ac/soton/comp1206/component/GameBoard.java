@@ -5,6 +5,8 @@ import javafx.scene.layout.GridPane;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import uk.ac.soton.comp1206.event.BlockClickedListener;
+import uk.ac.soton.comp1206.event.BlockHoveredListener;
+import uk.ac.soton.comp1206.event.LinesClearedListener;
 import uk.ac.soton.comp1206.game.Grid;
 
 /**
@@ -17,7 +19,7 @@ import uk.ac.soton.comp1206.game.Grid;
  * The GameBoard is only a visual representation and should not contain game logic or model logic in it, which should
  * take place in the Grid.
  */
-public class GameBoard extends GridPane {
+public class GameBoard extends GridPane implements LinesClearedListener {
 
     private static final Logger logger = LogManager.getLogger(GameBoard.class);
 
@@ -55,8 +57,21 @@ public class GameBoard extends GridPane {
      * The listener to call when a specific block is clicked
      */
     private BlockClickedListener blockClickedListener;
+    private BlockHoveredListener blockHoveredListener;
 
+    private boolean forbidHover;
 
+    private boolean clearAnimationInProgress;
+    private long animationTime;
+
+    private final long animationDuration = 1000000000L;
+    /**
+     * Handles forbidding a board to be highlighted.
+     * @param bool Yes/No
+     * */
+    public void toggleForbid(boolean bool){
+        this.forbidHover  = bool;
+    }
     /**
      * Create a new GameBoard, based off a given grid, with a visual width and height.
      * @param grid linked grid
@@ -64,6 +79,7 @@ public class GameBoard extends GridPane {
      * @param height the visual height
      */
     public GameBoard(Grid grid, double width, double height) {
+        this.forbidHover=false;
         this.cols = grid.getCols();
         this.rows = grid.getRows();
         this.width = width;
@@ -89,11 +105,36 @@ public class GameBoard extends GridPane {
         this.width = width;
         this.height = height;
         this.grid = new Grid(cols,rows);
+        this.clearAnimationInProgress = false;
 
         //Build the GameBoard
         build();
     }
 
+    /**
+     * Highlights a wanted coordinate.
+     *
+     * @param x x-coordinate
+     * @param y y-coordinate
+     * @param bool highlight/unhighlight
+     * */
+    public void setHighlighted(int x, int y, boolean bool){
+        blocks[x][y].setHighlighted(bool);
+    }
+    /**
+     * Unhighlight everything.*/
+    public void unHighlightAll(){
+        if(!forbidHover){
+            for(int x=0; x<cols;x++ ){
+                for (int y=0; y<rows;y++){
+                    setHighlighted(x,y,false);
+                }
+            }
+        }
+    }
+    public void fadeOut(int x, int y){
+        blocks[x][y].fadeOut();
+    }
     /**
      * Get a specific block from the GameBoard, specified by it's row and column
      * @param x column
@@ -126,10 +167,11 @@ public class GameBoard extends GridPane {
 
     /**
      * Create a block at the given x and y position in the GameBoard
+     *
      * @param x column
      * @param y row
      */
-    protected GameBlock createBlock(int x, int y) {
+    protected void createBlock(int x, int y) {
         var blockWidth = width / cols;
         var blockHeight = height / rows;
 
@@ -147,8 +189,8 @@ public class GameBoard extends GridPane {
 
         //Add a mouse click handler to the block to trigger GameBoard blockClicked method
         block.setOnMouseClicked((e) -> blockClicked(e, block));
-
-        return block;
+        block.setOnMouseEntered((e)->hover(e, block, this));
+        block.setOnMouseExited((e)->this.unHighlightAll());
     }
 
     /**
@@ -165,11 +207,29 @@ public class GameBoard extends GridPane {
      * @param block block clicked on
      */
     private void blockClicked(MouseEvent event, GameBlock block) {
-        logger.info("Block clicked: {}", block);
+        //logger.info("Block clicked: {}", block);
 
         if(blockClickedListener != null) {
             blockClickedListener.blockClicked(block);
         }
     }
-
+    /**
+     * Sets a listener for hovering over blocks in game.
+     *
+     * @param listener BlockHoveredListener.
+     * */
+    public void setOnBlockHover(BlockHoveredListener listener) {
+        this.blockHoveredListener = listener;
+    }
+    /**
+     * Hover over a block
+     *
+     * @param event MouseEvent
+     * @param block GameBlock to apply hover style on
+     * @param board GameBoard which the GameBlock is a part of*/
+    private void hover(MouseEvent event, GameBlock block, GameBoard board){
+        if (blockHoveredListener!=null){
+            blockHoveredListener.hover(block, board);
+        }
+    }
 }

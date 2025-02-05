@@ -12,7 +12,12 @@ import uk.ac.soton.comp1206.ui.GameWindow;
  * JavaFX Application class
  */
 public class App extends Application {
-
+    /**
+     * App
+     * */
+    public App(){
+        super();
+    }
     /**
      * Base resolution width
      */
