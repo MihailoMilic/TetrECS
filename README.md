@@ -122,7 +122,7 @@ This project uses several libraries, managed via Maven:
 
 ## 📜 Credits
 
-Developed by: **Your Name Here**
+Developed by: **Mihailo Milic**
 Course: **COMP1206 - University of Southampton**
 Year: **2025**
 
